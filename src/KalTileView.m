@@ -63,9 +63,12 @@ extern const CGSize kTileSize;
     markerImage = [UIImage imageNamed:@"Kal.bundle/kal_marker.png"];
   }
   
-  if (flags.marked)
+    if (flags.marked) {
     [markerImage drawInRect:CGRectMake(21.f, 5.f, 4.f, 5.f)];
-  
+        
+        [[UIColor colorWithRed:0 green:1 blue:0.3 alpha:0.7] setFill];
+        CGContextFillRect(ctx, CGRectMake(0, 0, kTileSize.width, kTileSize.height));
+    }
   NSUInteger n = [self.date day];
   NSString *dayText = [NSString stringWithFormat:@"%lu", (unsigned long)n];
   const char *day = [dayText cStringUsingEncoding:NSUTF8StringEncoding];

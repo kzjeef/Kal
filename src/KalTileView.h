@@ -12,6 +12,7 @@ enum {
 };
 typedef char KalTileType;
 
+
 @class KalDate;
 
 @interface KalTileView : UIView
@@ -23,6 +24,7 @@ typedef char KalTileType;
     unsigned int highlighted : 1;
     unsigned int marked : 1;
     unsigned int type : 2;
+    unsigned int markType : 4;
   } flags;
 }
 

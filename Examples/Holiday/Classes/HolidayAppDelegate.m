@@ -5,7 +5,9 @@
 
 #import "HolidayAppDelegate.h"
 #import "HolidaySqliteDataSource.h"
+#import "HolidayJSONDataSource.h"
 #import "HolidaysDetailViewController.h"
+#import "WorkdayDataSource.h"
 #import "Kal.h"
 
 @implementation HolidayAppDelegate
@@ -35,7 +37,9 @@
    */
   kal.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Today" style:UIBarButtonItemStyleBordered target:self action:@selector(showAndSelectToday)] autorelease];
   kal.delegate = self;
-  dataSource = [[HolidaySqliteDataSource alloc] init];
+  //dataSource = [[HolidaySqliteDataSource alloc] init];
+  //  dataSource = [[HolidayJSONDataSource alloc] init];
+    dataSource  = [[WorkdayDataSource alloc] init];
   kal.dataSource = dataSource;
   
   // Setup the navigation stack and display it.

@@ -133,7 +133,8 @@ static BOOL IsDateBetweenInclusive(NSDate *date, NSDate *begin, NSDate *end)
   if (!dataReady)
     return [NSArray array];
   
-  return [[self holidaysFrom:fromDate to:toDate] valueForKeyPath:@"date"];
+  NSArray *a = [[self holidaysFrom:fromDate to:toDate] valueForKeyPath:@"date"];
+    return a;
 }
 
 - (void)loadItemsFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate
