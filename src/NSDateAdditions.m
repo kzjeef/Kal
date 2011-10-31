@@ -27,11 +27,33 @@
   return [[NSCalendar currentCalendar] dateFromComponents:parts];
 }
 
+
+- (NSDate *)cc_dateByMovingToBeginningOfDayWithCalender:(NSCalendar *) cal
+{
+    unsigned int flags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+    NSDateComponents* parts = [cal components:flags fromDate:self];
+    [parts setHour:0];
+    [parts setMinute:0];
+    [parts setSecond:0];
+    return [cal dateFromComponents:parts];
+}
+
+- (NSDate *)cc_dateByMovingToEndOfDayWithCalender:(NSCalendar *)cal
+{
+    unsigned int flags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+    NSDateComponents* parts = [cal components:flags fromDate:self];
+    [parts setHour:23];
+    [parts setMinute:59];
+    [parts setSecond:59];
+    return [cal dateFromComponents:parts];
+}
+
 - (NSDate *)cc_dateByMovingToFirstDayOfTheMonth
 {
   NSDate *d = nil;
   BOOL ok = [[NSCalendar currentCalendar] rangeOfUnit:NSMonthCalendarUnit startDate:&d interval:NULL forDate:self];
   NSAssert1(ok, @"Failed to calculate the first day the month based on %@", self);
+    ok =  ok; // avoid warnning
   return d;
 }
 
