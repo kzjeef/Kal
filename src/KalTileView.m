@@ -64,11 +64,22 @@ extern const CGSize kTileSize;
   }
   
     if (flags.marked) {
-    [markerImage drawInRect:CGRectMake(21.f, 5.f, 4.f, 5.f)];
-      
-        // Fill with green rect.
-   //     [[UIColor colorWithRed:0 green:1 blue:0.3 alpha:0.7] setFill];
-    //    CGContextFillRect(ctx, CGRectMake(0, 0, kTileSize.width, kTileSize.height));
+//    [markerImage drawInRect:CGRectMake(21.f, 5.f, 4.f, 5.f)];
+        
+        // draw a triangle under the square to make this day.
+        CGContextSaveGState(ctx);
+        CGContextBeginPath(ctx);
+        CGContextMoveToPoint(ctx, kTileSize.width, 0);
+        CGContextAddLineToPoint(ctx, kTileSize.width, kTileSize.height/3);
+        CGContextAddLineToPoint(ctx, (kTileSize.width/3)*2, 0);
+        CGContextClosePath(ctx);
+        // todo the color should can be choose.
+        
+        CGContextSetRGBFillColor(ctx, 0, 0, 1, 0.44f);
+        CGContextSetBlendMode(ctx, kCGBlendModeScreen);
+
+        CGContextFillPath(ctx);
+        CGContextRestoreGState(ctx);
     }
   NSUInteger n = [self.date day];
   NSString *dayText = [NSString stringWithFormat:@"%lu", (unsigned long)n];
