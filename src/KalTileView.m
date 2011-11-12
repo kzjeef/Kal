@@ -6,6 +6,7 @@
 #import "KalTileView.h"
 #import "KalDate.h"
 #import "KalPrivate.h"
+#import "NSDate+JobInfo.h"
 
 extern const CGSize kTileSize;
 
@@ -39,17 +40,17 @@ extern const CGSize kTileSize;
   CGContextScaleCTM(ctx, 1, -1);
   
   if ([self isToday] && self.selected) {
-    [[[UIImage imageNamed:@"Kal.bundle/kal_tile_today_selected.png"] stretchableImageWithLeftCapWidth:6 topCapHeight:0] drawInRect:CGRectMake(0, -1, kTileSize.width+1, kTileSize.height+1)];
+      [[[UIImage imageNamed:@"Kal.bundle/kal_tile_today_selected.png"] stretchableImageWithLeftCapWidth:6 topCapHeight:0] drawInRect:CGRectMake(0, -1, kTileSize.width+1, kTileSize.height+1) blendMode:kCGBlendModeScreen alpha:0.8];
     textColor = [UIColor whiteColor];
     shadowColor = [UIColor blackColor];
     markerImage = [UIImage imageNamed:@"Kal.bundle/kal_marker_today.png"];
   } else if ([self isToday] && !self.selected) {
-    [[[UIImage imageNamed:@"Kal.bundle/kal_tile_today.png"] stretchableImageWithLeftCapWidth:6 topCapHeight:0] drawInRect:CGRectMake(0, -1, kTileSize.width+1, kTileSize.height+1)];
+      [[[UIImage imageNamed:@"Kal.bundle/kal_tile_today.png"] stretchableImageWithLeftCapWidth:6 topCapHeight:0] drawInRect:CGRectMake(0, -1, kTileSize.width+1, kTileSize.height+1) blendMode:kCGBlendModeScreen alpha:0.8];
     textColor = [UIColor whiteColor];
     shadowColor = [UIColor blackColor];
     markerImage = [UIImage imageNamed:@"Kal.bundle/kal_marker_today.png"];
   } else if (self.selected) {
-    [[[UIImage imageNamed:@"Kal.bundle/kal_tile_selected.png"] stretchableImageWithLeftCapWidth:1 topCapHeight:0] drawInRect:CGRectMake(0, -1, kTileSize.width+1, kTileSize.height+1)];
+      [[[UIImage imageNamed:@"Kal.bundle/kal_tile_selected.png"] stretchableImageWithLeftCapWidth:1 topCapHeight:0] drawInRect:CGRectMake(0, -1, kTileSize.width+1, kTileSize.height+1) blendMode:kCGBlendModeScreen alpha:0.9];
     textColor = [UIColor whiteColor];
     shadowColor = [UIColor blackColor];
     markerImage = [UIImage imageNamed:@"Kal.bundle/kal_marker_selected.png"];
@@ -62,25 +63,6 @@ extern const CGSize kTileSize;
     shadowColor = [UIColor whiteColor];
     markerImage = [UIImage imageNamed:@"Kal.bundle/kal_marker.png"];
   }
-  
-    if (flags.marked) {
-//    [markerImage drawInRect:CGRectMake(21.f, 5.f, 4.f, 5.f)];
-        
-        // draw a triangle under the square to make this day.
-        CGContextSaveGState(ctx);
-        CGContextBeginPath(ctx);
-        CGContextMoveToPoint(ctx, kTileSize.width, 0);
-        CGContextAddLineToPoint(ctx, kTileSize.width, kTileSize.height/3);
-        CGContextAddLineToPoint(ctx, (kTileSize.width/3)*2, 0);
-        CGContextClosePath(ctx);
-        // todo the color should can be choose.
-        
-        CGContextSetRGBFillColor(ctx, 0, 0, 1, 0.44f);
-        CGContextSetBlendMode(ctx, kCGBlendModeScreen);
-
-        CGContextFillPath(ctx);
-        CGContextRestoreGState(ctx);
-    }
   NSUInteger n = [self.date day];
   NSString *dayText = [NSString stringWithFormat:@"%lu", (unsigned long)n];
   const char *day = [dayText cStringUsingEncoding:NSUTF8StringEncoding];
@@ -100,6 +82,42 @@ extern const CGSize kTileSize;
     [[UIColor colorWithWhite:0.25f alpha:0.3f] setFill];
     CGContextFillRect(ctx, CGRectMake(0.f, 0.f, kTileSize.width, kTileSize.height));
   }
+    
+    if (flags.marked) {
+        //    [markerImage drawInRect:CGRectMake(21.f, 5.f, 4.f, 5.f)];
+        
+        // draw a triangle under the square to make this day.
+        CGContextSaveGState(ctx);
+        CGContextBeginPath(ctx);
+        
+        // right, down coner
+#if 0
+        CGContextMoveToPoint(ctx, kTileSize.width, 0);
+        CGContextAddLineToPoint(ctx, kTileSize.width, kTileSize.height/3);
+        CGContextAddLineToPoint(ctx, (kTileSize.width/3)*2, 0);
+#endif
+        // left, up conner
+        CGContextMoveToPoint(ctx, 0+1, kTileSize.height - 2);
+        CGContextAddLineToPoint(ctx, kTileSize.width/3, kTileSize.height - 2);
+        CGContextAddLineToPoint(ctx, 0+1, (kTileSize.height/3)*2);
+        
+        CGContextClosePath(ctx);
+        // todo the color should can be choose.
+        if (self.date.jobType == 2) {
+            CGContextSetRGBFillColor(ctx, 0, 1, 1, 0.89f);
+        } else {
+	    if (self.selected)
+		CGContextSetRGBFillColor(ctx, 0.8, 0.65, 0.7 ,1);
+	    else
+		CGContextSetRGBFillColor(ctx, 0.55, .4, .55 ,1);
+
+        }
+        CGContextSetBlendMode(ctx, kCGBlendModeScreen);
+        
+        CGContextFillPath(ctx);
+        CGContextRestoreGState(ctx);
+    }
+
 }
 
 - (void)resetState
